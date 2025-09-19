@@ -1,15 +1,21 @@
-# dependencies
+
+# Dependencies
 node_modules
-.env
-.next
-
-# build output
-out
-dist
-
-# misc
-.DS_Store
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-"node_modules" 
+.pnpm-debug.log*
+
+# Build outputs
+.next
+out
+dist
+
+# Local env files
+.env
+.env.local
+.env.*.local
+
+# Misc
+.DS_Store
+*.log
