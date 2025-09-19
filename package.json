@@ -1,0 +1,26 @@
+{
+  "name": "gainer-rpg",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.19",
+    "@supabase/auth-helpers-nextjs": "^0.10.0",
+    "@supabase/supabase-js": "^2.32.0",
+    "autoprefixer": "^10.4.21",
+    "next": "^15.5.3",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "recharts": "^2.6.2",
+    "swr": "^2.3.6",
+    "tailwind": "^2.3.1",
+    "tailwindcss": "^4.1.13"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13"
+  }
+}
