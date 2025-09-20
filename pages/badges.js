@@ -1,3 +1,28 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
-export default function Badges(){ const [badges,setBadges]=useState([]); useEffect(()=>{ load(); },[]); async function load(){ const { data } = await supabase.from('badges').select('*').limit(100); setBadges(data||[]); } return (<div><h1>Badges</h1><div className="card"><div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12}}>{badges.length===0 && <div className="small">No badges yet.</div>}{badges.map(b=>(<div key={b.id} className="card" style={{textAlign:'center',padding:12}}><div style={{fontSize:28}}>🏅</div><div style={{fontWeight:700}}>{b.name}</div><div className="small">{b.description}</div></div>))}</div></div></div>); }
+import { useEffect, useState } from "react";
+
+export default function Badges() {
+  const [badges, setBadges] = useState([]);
+
+  useEffect(() => {
+    // Only run in the browser
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("badges");
+      if (saved) setBadges(JSON.parse(saved));
+    }
+  }, []);
+
+  return (
+    <div>
+      <h1>Your Badges</h1>
+      {badges.length > 0 ? (
+        <ul>
+          {badges.map((b, i) => (
+            <li key={i}>{b}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No badges yet.</p>
+      )}
+    </div>
+  );
+}
