@@ -1,30 +1,14 @@
 // pages/dashboard.js
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { supabase } from "../lib/supabase";
+import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({});
-  const router = useRouter();
+  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("dashboardStats");
-      if (stored) {
-        try {
-          setStats(JSON.parse(stored));
-        } catch (err) {
-          console.error("Failed to parse dashboard stats:", err);
-        }
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("dashboardStats", JSON.stringify(stats));
-    }
-  }, [stats]);
-
+  if (loading) return <p>Loading...</p>;
+  if (!user) return <p>Please log in</p>;
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold">Dashboard</h1>
