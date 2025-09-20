@@ -1,29 +1,54 @@
-import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabaseClient';
+// pages/bosses.js
+import { useState, useEffect } from "react";
 
-export default function Bosses(){
+export default function Bosses() {
   const [bosses, setBosses] = useState([]);
-  useEffect(()=> {
-    async function load() {
-      try {
-        const { data: b } = await supabase.from('boss_progress').select('*').limit(10);
-        setBosses(b || []);
-      } catch(e) { console.error(e) }
+
+  // Load from localStorage only in the browser
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("bosses");
+      if (stored) {
+        try {
+          setBosses(JSON.parse(stored));
+        } catch (err) {
+          console.error("Failed to parse bosses:", err);
+        }
+      }
     }
-    load();
   }, []);
+
+  // Save to localStorage when bosses changes
+  useEffect(() => {
+    if (typeof window !== "undefined" && bosses.length > 0) {
+      localStorage.setItem("bosses", JSON.stringify(bosses));
+    }
+  }, [bosses]);
+
+  const addBoss = () => {
+    const newBoss = {
+      id: Date.now(),
+      name: `Boss ${bosses.length + 1}`,
+    };
+    setBosses([...bosses, newBoss]);
+  };
+
   return (
-    <main className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Boss Tracker</h1>
-      <div className="space-y-3">
-        {bosses.length===0 && <div className="p-4 bg-white/5 rounded">No active bosses yet.</div>}
-        {bosses.map(b => (
-          <div key={b.id} className="p-4 bg-white/5 rounded">
-            <strong>{b.boss_name}</strong>
-            <div className="mt-2">HP: {b.hp} / 100</div>
-          </div>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Bosses</h1>
+      <button
+        onClick={addBoss}
+        className="bg-purple-600 text-white px-4 py-2 rounded"
+      >
+        Add Boss
+      </button>
+      <ul className="mt-4 space-y-2">
+        {bosses.map((boss) => (
+          <li key={boss.id} className="border p-2 rounded">
+            {boss.name}
+          </li>
         ))}
-      </div>
-    </main>
+      </ul>
+    </div>
   );
 }

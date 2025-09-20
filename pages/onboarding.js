@@ -1,18 +1,33 @@
-// pages/onboarding.js
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import { useAuth } from "../context/AuthContext";
+import { useState, useEffect } from "react";
 
 export default function Onboarding() {
-  const { user, loading } = useAuth();
+  const [step, setStep] = useState(1);
 
-  if (loading) return <p>Loading...</p>;
-  if (!user) return <p>Not logged in</p>; // middleware will handle redirect
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("onboardingStep");
+      if (stored) {
+        setStep(Number(stored));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("onboardingStep", step);
+    }
+  }, [step]);
 
   return (
-    <div>
-      <h1>Onboarding</h1>
-      <p>Hi {user.email}, let’s get you set up!</p>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold">Onboarding</h1>
+      <p className="mt-2">You are on step {step}</p>
+      <button
+        onClick={() => setStep(step + 1)}
+        className="bg-green-600 text-white px-4 py-2 rounded mt-4"
+      >
+        Next Step
+      </button>
     </div>
   );
 }

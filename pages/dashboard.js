@@ -1,6 +1,38 @@
 // pages/dashboard.js
 import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router";import { useState, useEffect } from "react";
+
+export default function Dashboard() {
+  const [stats, setStats] = useState({ level: 1, xp: 0 });
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("dashboardStats");
+      if (stored) {
+        try {
+          setStats(JSON.parse(stored));
+        } catch (err) {
+          console.error("Failed to parse dashboard stats:", err);
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("dashboardStats", JSON.stringify(stats));
+    }
+  }, [stats]);
+
+  return (
+    <div className="p-6">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <p className="mt-2">Level: {stats.level}</p>
+      <p>XP: {stats.xp}</p>
+    </div>
+  );
+}
+
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../context/AuthContext";
 
