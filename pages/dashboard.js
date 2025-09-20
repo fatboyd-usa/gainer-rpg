@@ -1,9 +1,10 @@
 // pages/dashboard.js
-import { useEffect } from "react";
-import { useRouter } from "next/router";import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function Dashboard() {
-  const [stats, setStats] = useState({ level: 1, xp: 0 });
+  const [stats, setStats] = useState({});
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
